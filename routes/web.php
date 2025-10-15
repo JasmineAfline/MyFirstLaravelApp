@@ -1,18 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', function () {
-    return view('home');
-});
+// Home page
+Route::get('/home', [BlogController::class, 'home'])->name('home.index');
 
-Route::get('/about', function () {
-    return view('about');
-});
-Route::get('/contact', function () {
-    return view('contact');
-});
+// About page
+Route::get('/about', [BlogController::class, 'about'])->name('about.index');
+
+// ✅ Blog page
+Route::get('/blog', [BlogController::class, 'blog'])->name('blog.index');
+
+// Contact page
+Route::get('/contact', [BlogController::class, 'contact'])->name('contact.index');
+
+
