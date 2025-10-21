@@ -1,22 +1,28 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BlogController;
 
+// 🏠 Home page
 Route::get('/', function () {
-    return view('welcome');
+    return view('home'); // You already have home.blade.php
+})->name('home');
+
+// 📊 Dashboard (requires login)
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// 🌍 Public pages
+Route::view('/about', 'about')->name('about');
+Route::view('/projects', 'projects')->name('projects');
+Route::view('/contact', 'contact')->name('contact');
+
+// 👤 Profile (auth required)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Home page
-Route::get('/home', [BlogController::class, 'home'])->name('home.index');
-
-// About page
-Route::get('/about', [BlogController::class, 'about'])->name('about.index');
-
-// ✅ Blog page
-Route::get('/blog', [BlogController::class, 'blog'])->name('blog.index');
-
-// Contact page
-Route::get('/contact', [BlogController::class, 'contact'])->name('contact.index');
-
-
+require __DIR__.'/auth.php';
